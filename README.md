@@ -38,35 +38,11 @@ An **Enterprise-Grade Infrastructure as Code (IaC)** solution designed for autom
 
 ## 🏗️ Architecture Overview
 
-```mermaid
-graph TD
-    subgraph Azure DevOps CI/CD Pipeline
-        CI[Stage 1: Build & Security Scan]
-        CD[Stage 2: Deploy & Apply]
-    end
+The following architecture illustrates the complete Terraform-based DevSecOps workflow, including Azure DevOps Build and Deploy stages, security scanning, Terraform plan artifact management, remote state storage, and Azure infrastructure provisioning.
 
-    subgraph Security Suite
-        TL[TFLint - Code Quality]
-        CK[Checkov - IaC Compliance]
-        TV[Trivy - Vulnerability Scan]
-        TH[TruffleHog - Secret Detection]
-    end
-
-    subgraph Azure Cloud Infrastructure
-        RG[Resource Group]
-        SA[Storage Account]
-        VN[Virtual Network]
-        SN[Subnet]
-        PIP[Public IP]
-        NIC[Network Interface]
-        VM[Linux Virtual Machine]
-    end
-
-    CI --> TL & CK & TV & TH
-    CI -->|Generate & Publish Plan| Artifact[tfplan Artifact]
-    Artifact --> CD
-    CD -->|Terraform Apply| RG & SA & VN & SN & PIP & NIC & VM
-```
+<p align="center">
+  <img src="./Gemini_Generated_Image_xel352xel352xel3.png" alt="Azure DevOps Terraform DevSecOps Architecture" width="100%">
+</p>
 
 ---
 
@@ -98,15 +74,15 @@ Infra-pipeline/
 
 The project provisions the following Azure resources:
 
-| Resource Type | Module Path | Description |
-| :--- | :--- | :--- |
-| **Resource Group** | `Child Module/azurerm_resource_group` | Logical container for Azure resources |
-| **Storage Account** | `Child Module/azurerm_storage_account` | Azure Blob / File storage account |
-| **Virtual Network** | `Child Module/azurerm_virtual_network` | Isolated virtual network (`10.0.0.0/16`) |
-| **Subnet** | `Child Module/azurerm_subnet` | Network subnet allocation (`10.0.1.0/24`) |
-| **Public IP** | `Child Module/azurerm_public_ip` | Static public IP address allocation |
-| **NIC Card** | `Child Module/azurerm_nic` | Network interface linking Subnet and Public IP |
-| **Virtual Machine** | `Child Module/azurerm_virtual_machine` | Linux Compute VM (Ubuntu Pro 24.04 LTS) |
+| Resource Type       | Module Path                            | Description                                    |
+| :------------------ | :------------------------------------- | :--------------------------------------------- |
+| **Resource Group**  | `Child Module/azurerm_resource_group`  | Logical container for Azure resources          |
+| **Storage Account** | `Child Module/azurerm_storage_account` | Azure Blob / File storage account              |
+| **Virtual Network** | `Child Module/azurerm_virtual_network` | Isolated virtual network (`10.0.0.0/16`)       |
+| **Subnet**          | `Child Module/azurerm_subnet`          | Network subnet allocation (`10.0.1.0/24`)      |
+| **Public IP**       | `Child Module/azurerm_public_ip`       | Static public IP address allocation            |
+| **NIC Card**        | `Child Module/azurerm_nic`             | Network interface linking Subnet and Public IP |
+| **Virtual Machine** | `Child Module/azurerm_virtual_machine` | Linux Compute VM (Ubuntu Pro 24.04 LTS)        |
 
 ---
 
@@ -134,6 +110,7 @@ Security is baked directly into the CI/CD pipeline. Every pull request/commit tr
 The pipeline defined in `azure-pipelines.yml` consists of two distinct stages:
 
 ### Stage 1: Build (Continuous Integration - CI)
+
 1. **Terraform Job**:
    - Installs latest Terraform version.
    - Runs `terraform fmt` to enforce code formatting.
@@ -146,6 +123,7 @@ The pipeline defined in `azure-pipelines.yml` consists of two distinct stages:
    - Publishes `tfplan` as a secure Pipeline Artifact (`TerraformPlan`).
 
 ### Stage 2: Deploy (Continuous Deployment - CD)
+
 1. **Apply Job**:
    - Downloads `TerraformPlan` artifact from the Build stage.
    - Executes `terraform apply --auto-approve tfplan` to provision resources.
@@ -166,17 +144,20 @@ The pipeline defined in `azure-pipelines.yml` consists of two distinct stages:
 To run and test the modules locally on your machine:
 
 1. **Clone the repository**:
+
    ```bash
    git clone <repository-url>
    cd Infra-pipeline/"Parent Module"
    ```
 
 2. **Login to Azure**:
+
    ```bash
    az login
    ```
 
 3. **Initialize Terraform**:
+
    ```bash
    terraform init \
      -backend-config="storage_account_name=<your_storage_account>" \
@@ -185,12 +166,14 @@ To run and test the modules locally on your machine:
    ```
 
 4. **Format & Validate**:
+
    ```bash
    terraform fmt
    terraform validate
    ```
 
 5. **Generate Execution Plan**:
+
    ```bash
    terraform plan
    ```
