@@ -91,16 +91,18 @@ The project provisions the following Azure resources:
 Security is baked directly into the CI/CD pipeline. Every pull request/commit triggers a battery of scans:
 
 ```
-+-----------------------------------------------------------------------+
-|                   DevSecOps Security Pipeline                         |
-+-------------------+---------------------------------------------------+
-| 🛠️ Tool           |      Purpose                                      |
-+-------------------+---------------------------------------------------+
-| 🛠️ TFLint         | Terraform linter detecting errors & bad practices |
-| 🛡️ Checkov        | Static code analysis for security & compliance    |
-| 🔍 Trivy          | IaC security scanner for misconfigurations        |
-| 🔐 TruffleHog     | Secret scanner detecting embedded credentials     |
-+-------------------+---------------------------------------------------+
+## 🔐 DevSecOps Security Pipeline
+
+| 🛠️ Tool | 🎯 Purpose |
+|---|---|
+| **TFLint** | Terraform linter that detects errors, deprecated syntax, and bad practices |
+| **Checkov** | Static analysis tool for identifying security and compliance issues in IaC |
+| **Trivy** | Security scanner for detecting IaC misconfigurations and vulnerabilities |
+| **TruffleHog** | Secret scanner that detects exposed credentials, API keys, and sensitive information |
+
+### 🔄 Security Flow
+
+**Terraform Code → TFLint → Checkov → Trivy → TruffleHog → Terraform Plan/Apply**
 ```
 
 ---
