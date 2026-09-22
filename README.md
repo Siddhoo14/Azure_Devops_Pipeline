@@ -92,13 +92,13 @@ Security is baked directly into the CI/CD pipeline. Every pull request/commit tr
 
 ```
 +-----------------------------------------------------------------------+
-|                       DevSecOps Security Pipeline                     |
+|                   DevSecOps Security Pipeline                         |
 +-------------------+---------------------------------------------------+
-| Tool              | Purpose                                           |
+| 🛠️ Tool           |      Purpose                                      |
 +-------------------+---------------------------------------------------+
 | 🛠️ TFLint         | Terraform linter detecting errors & bad practices |
 | 🛡️ Checkov        | Static code analysis for security & compliance    |
-| 🔍 Trivy          | IaC security scanner for misconfigurations       |
+| 🔍 Trivy          | IaC security scanner for misconfigurations        |
 | 🔐 TruffleHog     | Secret scanner detecting embedded credentials     |
 +-------------------+---------------------------------------------------+
 ```
